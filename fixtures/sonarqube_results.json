@@ -1,0 +1,206 @@
+{
+  "_fixture_note": "SAMPLE DATA FOR DEMONSTRATION ONLY — not from a production SonarQube server.",
+  "total": 14,
+  "p": 1,
+  "ps": 100,
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 100,
+    "total": 14
+  },
+  "issues": [
+    {
+      "key": "AZk2pL9xQ8mN-vuln-sql-001",
+      "rule": "pythonsecurity:S3649",
+      "severity": "BLOCKER",
+      "component": "flask-payments-api:src/api/transactions.py",
+      "project": "flask-payments-api",
+      "line": 142,
+      "hash": "a1b2c3d4e5f678901234567890abcd12ef",
+      "textRange": {
+        "startLine": 138,
+        "endLine": 146,
+        "startOffset": 4,
+        "endOffset": 52
+      },
+      "message": "Change this code to not construct SQL queries directly from user-controlled data.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "45min",
+      "debt": "45min",
+      "tags": [
+        "cwe-89",
+        "sql"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-vuln-cred-002",
+      "rule": "python:S2068",
+      "severity": "CRITICAL",
+      "component": "flask-payments-api:config/settings.py",
+      "project": "flask-payments-api",
+      "line": 28,
+      "hash": "b2c3d4e5f678901234567890abcd12ef01",
+      "textRange": {
+        "startLine": 26,
+        "endLine": 30,
+        "startOffset": 0,
+        "endOffset": 64
+      },
+      "message": "Remove this hardcoded password; use environment variables or a secrets manager.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "20min",
+      "tags": [
+        "cwe-259",
+        "cert"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-vuln-deser-003",
+      "rule": "python:S5527",
+      "severity": "CRITICAL",
+      "component": "flask-payments-api:src/services/cache_loader.py",
+      "project": "flask-payments-api",
+      "line": 61,
+      "hash": "c3d4e5f678901234567890abcd12ef0123",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 64,
+        "startOffset": 8,
+        "endOffset": 41
+      },
+      "message": "Deserializing with pickle is insecure; use JSON or another safe format.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "status": "OPEN",
+      "effort": "30min",
+      "tags": [
+        "cwe-502",
+        "pickle"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-vuln-ssrf-004",
+      "rule": "pythonsecurity:S3752",
+      "severity": "MAJOR",
+      "component": "flask-payments-api:src/clients/webhook_client.py",
+      "project": "flask-payments-api",
+      "line": 39,
+      "hash": "d4e5f678901234567890abcd12ef012345",
+      "message": "This URL is built from a user-controlled value; validate against an allowlist to prevent SSRF.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "1h",
+      "tags": [
+        "cwe-918"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-vuln-xss-005",
+      "rule": "pythonsecurity:S5131",
+      "severity": "MAJOR",
+      "component": "flask-payments-api:src/templates/receipt.html",
+      "project": "flask-payments-api",
+      "line": 22,
+      "hash": "e5f678901234567890abcd12ef01234567",
+      "message": "Make sure not to expose this data in the response without escaping it.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "40min",
+      "tags": [
+        "cwe-79",
+        "xss"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-bug-hash-006",
+      "rule": "python:S4790",
+      "severity": "MAJOR",
+      "component": "flask-payments-api:src/auth/password_utils.py",
+      "project": "flask-payments-api",
+      "line": 17,
+      "hash": "f678901234567890abcd12ef0123456789",
+      "message": "Use a secure hashing algorithm (bcrypt, Argon2, or scrypt) instead of MD5.",
+      "type": "VULNERABILITY",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "25min",
+      "tags": [
+        "cwe-327"
+      ]
+    },
+    {
+      "key": "AZk2pL9xQ8mN-code-smell-007",
+      "rule": "python:S3776",
+      "severity": "MINOR",
+      "component": "flask-payments-api:src/api/admin_routes.py",
+      "project": "flask-payments-api",
+      "line": 88,
+      "hash": "78901234567890abcd12ef0123456789ab",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "15min"
+    },
+    {
+      "key": "AZk2pL9xQ8mN-code-smell-008",
+      "rule": "python:S1481",
+      "severity": "MINOR",
+      "component": "flask-payments-api:src/models/payment.py",
+      "project": "flask-payments-api",
+      "line": 204,
+      "hash": "8901234567890abcd12ef0123456789abcd",
+      "message": "Remove the unused local variable \"pending_total\".",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "status": "OPEN",
+      "effort": "2min"
+    },
+    {
+      "key": "AZk2pL9xQ8mN-info-todo-009",
+      "rule": "python:S1135",
+      "severity": "INFO",
+      "component": "flask-payments-api:src/app.py",
+      "project": "flask-payments-api",
+      "line": 11,
+      "hash": "901234567890abcd12ef0123456789abcde",
+      "message": "Complete the task associated to this \"TODO\" comment.",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "status": "OPEN",
+      "effort": "0min"
+    },
+    {
+      "key": "AZk2pL9xQ8mN-info-doc-010",
+      "rule": "python:S1172",
+      "severity": "INFO",
+      "component": "flask-payments-api:src/middleware/request_id.py",
+      "project": "flask-payments-api",
+      "line": 45,
+      "hash": "01234567890abcd12ef0123456789abcdef",
+      "message": "Remove the unused function parameter \"correlation_id\".",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "status": "OPEN",
+      "effort": "5min"
+    }
+  ],
+  "components": [],
+  "facets": []
+}
