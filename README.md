@@ -1,4 +1,4 @@
-# vuln-triage-pipeline
+# Vulnerability Triage Pipeline
 
 `vuln_triage.py` takes machine-readable output from **Trivy** (container or filesystem JSON) and **SonarQube** (issues JSON), maps everything into one normalized finding shape, deduplicates overlapping hits (especially by CVE), and assigns each finding to **BLOCK**, **TRACK**, or **IGNORE**. It writes a JSON report plus a Markdown summary suitable for humans and for CI gates. The problem it solves is repeated, incompatible scan formats across tools: you get one prioritized remediation view and a single policy for when the pipeline should fail versus when work should land in a backlog.
 
