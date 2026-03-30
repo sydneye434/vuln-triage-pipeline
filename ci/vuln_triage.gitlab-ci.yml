@@ -1,0 +1,54 @@
+# =============================================================================
+# Vulnerability triage aggregation — drop-in GitLab CI job
+# -----------------------------------------------------------------------------
+# Where this fits: Run this job *after* your Trivy (container/filesystem) and
+# SonarQube scan jobs have finished. Those jobs should expose their JSON
+# outputs as job artifacts. This stage downloads those artifacts, runs
+# vuln_triage.py to normalize/deduplicate/triage, publishes the Markdown and
+# JSON reports as *this* job's artifacts (browse/download in the pipeline UI),
+# and fails the pipeline when any BLOCK-category finding exists (script exit 1).
+# TRACK/IGNORE-only results produce exit 0 and a green job.
+#
+# Integration: copy the `vuln_triage_aggregate` job below into .gitlab-ci.yml,
+# or use:  include: { local: 'ci/vuln_triage.gitlab-ci.yml' }
+# Ensure `stages` includes this stage after scans, e.g.:
+#   stages: [build, test, trivy_scan, sonarqube_scan, security_triage, deploy]
+# Rename `needs:` job names to match your Trivy and SonarQube jobs. Set
+# VULN_TRIAGE_* variables if artifact filenames differ; if you change
+# VULN_TRIAGE_OUT_DIR, update `artifacts.paths` below to match.
+# `vuln_triage.py` is assumed at the repository root (adjust `script:` if not).
+# =============================================================================
+
+variables:
+  # Paths to scan JSON *inside the job workspace* after upstream artifacts are
+  # fetched (relative to $CI_PROJECT_DIR). Override in project CI/CD variables
+  # or per-environment if your scan jobs write different filenames.
+  VULN_TRIAGE_TRIVY_JSON: "trivy-report.json"
+  VULN_TRIAGE_SONAR_JSON: "sonarqube-issues.json"
+  VULN_TRIAGE_OUT_DIR: "vuln-triage-output"
+
+vuln_triage_aggregate:
+  stage: security_triage
+  image: python:3.11-alpine
+  needs:
+    # Replace job names with your pipeline’s Trivy and SonarQube scan jobs.
+    # artifacts: true ensures their report files are downloaded into this job.
+    - job: trivy_scan
+      artifacts: true
+    - job: sonarqube_scan
+      artifacts: true
+  script:
+    - set -euo pipefail
+    - test -f "$VULN_TRIAGE_TRIVY_JSON" || { echo "Missing Trivy JSON: $VULN_TRIAGE_TRIVY_JSON"; exit 1; }
+    - test -f "$VULN_TRIAGE_SONAR_JSON" || { echo "Missing SonarQube JSON: $VULN_TRIAGE_SONAR_JSON"; exit 1; }
+    - python3 vuln_triage.py --trivy "$VULN_TRIAGE_TRIVY_JSON" --sonarqube "$VULN_TRIAGE_SONAR_JSON" --output-dir "$VULN_TRIAGE_OUT_DIR"
+  artifacts:
+    name: "vuln-triage-$CI_PIPELINE_ID"
+    # Publish reports even when the job fails (BLOCK findings → exit 1) so reviewers can read the summary.
+    when: always
+    expire_in: 30 days
+    paths:
+      # Keep in sync with VULN_TRIAGE_OUT_DIR (default: vuln-triage-output).
+      # Markdown is listed in the job’s artifact browser for quick review.
+      - vuln-triage-output/vuln_triage_summary.md
+      - vuln-triage-output/vuln_triage_report.json
